@@ -17,7 +17,7 @@ cursor = conn.cursor()
 # table_names = cursor.fetchall()
 cursor.execute(f"select Buffer,Id from {table_name}")
 the_moments = cursor.fetchall()
-print(f"共找到{len(the_moments)}条朋友圈。")
+print(f"共找到{len(the_moments)}条朋友圈。\n")
 
 
 def deal_with_plist_node(node_, objects_):
@@ -76,6 +76,9 @@ def deal_with_like_or_comment(item_):
 # end_def
 
 
+print(f"| time_string | contentDesc | sharedLink | sourceNickName |")
+print(f"| --- | --- | --- | --- |")
+
 moments = []
 # idx = 0
 for moment in the_moments:
@@ -104,18 +107,30 @@ for moment in the_moments:
     mmt['likes'] = []
     mmt['comments'] = []
     mmt['contentDesc'] = None
+    mmt['sourceNickName'] = None
     mmt['sharedLink'] = {}
 
     for item in details:
+        # if type(item) == str:
+        #     if item == '神经现实':
+        #         print(details)
         if type(item) == dict and 'bDeleted' in item:
             if item['type'] == 1:
                 mmt['likes'].append(deal_with_like_or_comment(item))
             elif item['type'] == 2:
                 mmt['comments'].append(deal_with_like_or_comment(item))
-        elif type(item) == dict and 'contentDesc' in item:
-            mmt['contentDesc'] = item['contentDesc']
+        elif type(item) == dict:
+            contentDesc = ''
+            sharedLink = ''
+            sourceNickName = ''
+            if 'contentDesc' in item and item['contentDesc']:
+                mmt['contentDesc'] = item['contentDesc']
+                contentDesc = mmt['contentDesc'].replace('|', '\\|').replace('\n', '<br/>')
+            if 'sourceNickName' in item and item['sourceNickName']:
+                mmt['sourceNickName'] = item['sourceNickName']
+                sourceNickName = mmt['sourceNickName']
             if 'contentObj' in item and item['contentObj'] \
                     and 'type' in item['contentObj'] and item['contentObj']['type'] == 3:
                 mmt['sharedLink'] = (deal_with_shared_link(item['contentObj']))
-                print(f"---\n\n{time_string}\n{mmt['contentDesc']}")
-                print(f"{mmt['sharedLink']['md']}\n")
+                sharedLink = mmt['sharedLink']['md'].replace('|', '\\|')
+                print(f"| {time_string} | {contentDesc} | {sharedLink} | {sourceNickName} |")

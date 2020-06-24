@@ -42,30 +42,38 @@ def deal_with_users(item_):
     result_ = []
     if type(item_) == dict and 'NS.objects' in item_ and item_['NS.objects']:
         for obj_ in item_['NS.objects']:
-            xx_ = {
-                'commentID': obj_['commentID'],
-                'type': obj_['type'],
-                'content': obj_['content'],
-                'username': obj_['username'],
-                'nickname': obj_['nickname'],
-                'createTime': obj_['createTime'],
-                'bDeleted': obj_['bDeleted'],
-                'refCommentID': obj_['refCommentID'],
-                'isAdvertiserComment': obj_['isAdvertiserComment'],
-                'isRefAdvertiserComment': obj_['isRefAdvertiserComment'],
-                'refUserName': obj_['refUserName'],
+            if obj_['type'] == 1:
+                xx_ = {
+                    'type': obj_['type'],
+                    'username': obj_['username'],
+                    'nickname': obj_['nickname'],
+                    'createTime': obj_['createTime'],
+                }
+            else:
+                xx_ = {
+                    'type': obj_['type'],
+                    'commentID': obj_['commentID'],
+                    'content': obj_['content'],
+                    'username': obj_['username'],
+                    'nickname': obj_['nickname'],
+                    'createTime': obj_['createTime'],
+                    'bDeleted': obj_['bDeleted'],
+                    # 'isAdvertiserComment': obj_['isAdvertiserComment'],
+                    # 'isRefAdvertiserComment': obj_['isRefAdvertiserComment'],
+                    'refCommentID': obj_['refCommentID'],
+                    'refUserName': obj_['refUserName'],
 
-                'commentFlag': obj_['commentFlag'],
-                'snsEmojiInfoObj': obj_['snsEmojiInfoObj'],
-                'isLocalAdded': obj_['isLocalAdded'],
-            }
+                    # 'commentFlag': obj_['commentFlag'],
+                    'snsEmojiInfoObj': obj_['snsEmojiInfoObj'],
+                    # 'isLocalAdded': obj_['isLocalAdded'],
+                }
             result_.append(xx_)
     return result_
 # end_def
 
 
 def deal_with_url(item_):
-    result_ = {}
+    result_ = {'url': ''}
     if type(item_) == dict:
         result_ = {
             'url': item_['url'],
@@ -74,7 +82,7 @@ def deal_with_url(item_):
             'videomd5': item_['videomd5'],
             'token': item_['token'],
         }
-    return result_
+    return result_['url']
 # end_def
 
 
@@ -83,24 +91,24 @@ def deal_with_media_list(item_):
     if type(item_) == dict and 'NS.objects' in item_ and item_['NS.objects']:
         for obj_ in item_['NS.objects']:
             xx_ = {
-                'tid': obj_['tid'],
-                'mid': obj_['mid'],
+                # 'tid': obj_['tid'],
+                # 'mid': obj_['mid'],
                 'type': obj_['type'],
+                'title': obj_['title'],
+                'attachShareTitle': obj_['attachShareTitle'],
                 'imgSize': obj_['imgSize'],
                 'songLyric': obj_['songLyric'],
-                'songAlbumUrl': obj_['songAlbumUrl'],
-                'videoDuration': obj_['videoDuration'],
-                'attachVideoTotalTime': obj_['attachVideoTotalTime'],
-                'attachThumbUrl': obj_['attachThumbUrl'],
-                'gameSnsVideoThumbUrl': obj_['gameSnsVideoThumbUrl'],
+                # 'videoDuration': obj_['videoDuration'],
+                # 'attachVideoTotalTime': obj_['attachVideoTotalTime'],
 
-                'dataUrl': deal_with_url(obj_['dataUrl']),
                 'source': obj_['source'],
-                'isAd': obj_['isAd'],
-                'title': obj_['title'],
+                # 'isAd': obj_['isAd'],
+                'dataUrl': deal_with_url(obj_['dataUrl']),
+                'songAlbumUrl': deal_with_url(obj_['songAlbumUrl']),
                 'lowBandUrl': deal_with_url(obj_['lowBandUrl']),
                 'attachUrl': deal_with_url(obj_['attachUrl']),
-                'attachShareTitle': obj_['attachShareTitle'],
+                'attachThumbUrl': deal_with_url(obj_['attachThumbUrl']),
+                'gameSnsVideoThumbUrl': deal_with_url(obj_['gameSnsVideoThumbUrl']),
             }
             result_.append(xx_)
             # if xx_['songAlbumUrl'] and xx_['songAlbumUrl'] != '$null':
@@ -203,6 +211,7 @@ def deal_with_thing(item_):
     result = {
         'tid': item_['tid'],
         'contentDesc': item_['contentDesc'],
+        'contentDescScene': item_['contentDescScene'],
         'createtime': item_['createtime'],
         'createtime_string': deal_with_time(item_['createtime']),
         'username': item_['username'],
@@ -217,23 +226,23 @@ def deal_with_thing(item_):
         'commentUsers': deal_with_users(item_['commentUsers']),
         'withUsers': deal_with_users(item_['withUsers']),
         'contentObj': deal_with_content_obj(item_['contentObj']),
-        'locationInfo': deal_with_location_info(item_['locationInfo']),
-        'appInfo': deal_with_app_info(item_['appInfo']),
+        # 'locationInfo': deal_with_location_info(item_['locationInfo']),
+        # 'appInfo': deal_with_app_info(item_['appInfo']),
 
-        'wcweappInfo': deal_with_wcweapp_info(item_['wcweappInfo']),
+        # 'wcweappInfo': deal_with_wcweapp_info(item_['wcweappInfo']),
 
-        'selfLikeCount': item_['selfLikeCount'],
-        'selfCommentCount': item_['selfCommentCount'],
-        'likeCount': item_['likeCount'],
-        'commentCount': item_['commentCount'],
+        # 'selfLikeCount': item_['selfLikeCount'],
+        # 'selfCommentCount': item_['selfCommentCount'],
+        # 'likeCount': item_['likeCount'],
+        # 'commentCount': item_['commentCount'],
 
         'type': item_['type'],
-        'flag': item_['flag'],
-        'extFlag': item_['extFlag'],
+        # 'flag': item_['flag'],
+        # 'extFlag': item_['extFlag'],
 
         'wcmusicInfo': deal_with_wcmusic_info(item_['wcmusicInfo']),
         'shareOpenUrl': item_['shareOpenUrl'],
-        'recommendInfo': item_['recommendInfo'],
+        # 'recommendInfo': item_['recommendInfo'],
     }
     return result
 # end_def
